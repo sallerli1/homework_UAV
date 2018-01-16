@@ -12,8 +12,48 @@ const RESULT_ERROR_MSG = "Error: "
 const FIRST_RECORD_FORMAT = [{
     name: "ID",
     type: String
+},
+{
+    name: "x",
+    type: "Integer"
+},
+{
+    name: "y",
+    type: "Integer"
+},
+{
+    name: "z",
+    type: "Integer"
 }]
-const RECORD_FROMAT = ["ID", "x", "y", "z", "ox", "oy", "oz"]
+
+const RECORD_FROMAT = [{
+    name: "ID",
+    type: String
+},
+{
+    name: "x",
+    type: "Integer"
+},
+{
+    name: "y",
+    type: "Integer"
+},
+{
+    name: "z",
+    type: "Integer"
+},
+{
+    name: "ox",
+    type: "Integer"
+},
+{
+    name: "oy",
+    type: "Integer"
+},
+{
+    name: "oz",
+    type: "Integer"
+}]
 
 function _calc (record) {
     record.x += record.ox

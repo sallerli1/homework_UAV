@@ -1,33 +1,24 @@
-const { EOL } = require("os")
 const crypto = require("crypto")
+const RecordManager = require("./recordManager.js")
 
 
 
 class RecordCollector {
 
-    constructor(rm) {
-        this.rm = rm
+    constructor() {
+        this.rm = new RecordManager()
     }
 
-    collect(recStr) {
-        let hash = createHash(recStr)
+    collect(record, shouldCache) {
+        let hash = createHash(record)
+        this.rm.emit("caculate", record, {
+            hash: hash,
+            shouldCache: shouldCache
+        })
+    }
 
-        function _processRecStr(recStr) {
-            let strArr = recStr.split(EOL),
-                record = []
-
-            for (const str of strArr) {
-                let values = str.trim().split(" ")
-                values = values.filter((value) => {
-                    return value != ""
-                })
-                record.push(values)
-            }
-
-            return record
-        }
-
-        
+    query(index) {
+        return this.rm.query(index)
     }
 }
 
@@ -37,7 +28,4 @@ function createHash(str) {
     return hasher.digest("base64")
 }
 
-var rc = new RecordCollector(1)
-var str = "a   b c 1" + EOL + " c d e 1 2 3"
-
-console.log(rc.collect(str))
+module.exports = RecordCollector
