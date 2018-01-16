@@ -28,10 +28,6 @@ class RecordManager extends EventEmitter {
         let _calculate = this.compiler.compileToFunction(record)
         RecordManager.result = createResult(_calculate, options)
     }
-
-    query (index) {
-        return RecordManager.result && RecordManager.result.query(index)
-    }
 }
 
 RecordManager.result = null

@@ -18,7 +18,7 @@ class RecordCollector {
     }
 
     query(index) {
-        return this.rm.query(index)
+        return RecordManager.result && RecordManager.result.query(index)
     }
 }
 
