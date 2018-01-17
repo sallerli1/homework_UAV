@@ -1,12 +1,11 @@
 
-const constants = require("../shared/constants.js")
+const { RESULT_ERROR, RESULT_NOT_FOUND, RESULT_NOT_FOUND_MSG, RESULT_ERROR_MSG } = require("../shared/constants.js")
+const { isType } = require("../shared/util.js")
 
 class Result {
-    UAVID;
-    value = [];
-
-    constructor (ID) {
-        this.UAVID = ID
+    constructor (IDs, lasts) {
+        this.UAVIDs = IDs
+        this.lasts = lasts
         this.query = createQueryFn()
     }
 
@@ -37,6 +36,8 @@ class Result {
 }
 
 function createQueryFn() {
+
+    // cache query results
     const cache = {}
 
     return function (index) {
@@ -44,23 +45,20 @@ function createQueryFn() {
             return cache[index]
         }
 
-        let value = this.value[index],
+        let value = this.value[index] || RESULT_NOT_FOUND,
             result
         switch (value) {
-            case constants.RESULT_ERROR:
-                result = constants.RESULT_ERROR_MSG + index
+            case RESULT_ERROR:
+                result = RESULT_ERROR_MSG + index
                 break
 
-            case constants.RESULT_NOT_FOUND:
-                result = constants.RESULT_NOT_FOUND_MSG + index
+            case RESULT_NOT_FOUND:
+                result = RESULT_NOT_FOUND_MSG + index
                 break
 
             default:
-                if (Array.isArray(value)) {
-                    result = this.UAVID
-                    for (const axis of value) {
-                        result += axis
-                    }
+                if (isType(value, Object)) {
+                    result = `${value.ID} ${index} ${value.x} ${value.y} ${value.z}`
                 }
                 break
         }
@@ -84,14 +82,24 @@ function createResult (_calculate, options) {
     const hash = options && options.hash,
         shouldCache = options && options.shouldCache
 
+    // if the record has been calculated get it from cache
     if (hash && resultCache[hash]) {
         return resultCache[hash]
+    } else {
+        
     }
 
-    let result = new Result(ID)
-    result.value = _calculate()
+    if (!_calculate) {
+        return null
+    }
+
+    let { IDs, lasts, value } = _calculate()
+    let result = new Result(IDs, lasts)
+    result.value = value
 
     if (shouldCache && hash) {
+
+        // cache results
         resultCache[hash] = result
     }
 

@@ -2,7 +2,8 @@ const crypto = require("crypto")
 const RecordManager = require("./recordManager.js")
 
 
-
+// this collector is meant to collect string record
+//   and create hash for cache check
 class RecordCollector {
 
     constructor() {
@@ -11,7 +12,7 @@ class RecordCollector {
 
     collect(record, shouldCache) {
         let hash = createHash(record)
-        this.rm.emit("caculate", record, {
+        this.rm.emit("calc", record, {
             hash: hash,
             shouldCache: shouldCache
         })
@@ -22,6 +23,7 @@ class RecordCollector {
     }
 }
 
+// get the hash of a certain record
 function createHash(str) {
     let hasher = crypto.createHash("sha256")
     hasher.update(str)

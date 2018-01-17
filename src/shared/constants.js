@@ -85,6 +85,28 @@ function _check (record, last) {
     return typeCheck && valueCheck
 }
 
+const globalCmdOptions = {
+    file: {
+        oper: "file",
+        params: {
+            shouldCache: "c"
+        }
+    },
+    query: {
+        oper: "query",
+        params: {}
+    }
+}
+
+const globalCompilerOptions = {
+    format: RECORD_FROMAT,
+    formatFirst: FIRST_RECORD_FORMAT,
+    resultError: RESULT_ERROR,
+    check: _check,
+    calc: _calc,
+    seperater: " "
+}
+
 module.exports.resultStackLength = resultStackLength
 module.exports.RESULT_NOT_FOUND = RESULT_NOT_FOUND
 module.exports.RESULT_ERROR = RESULT_ERROR
@@ -94,3 +116,6 @@ module.exports.FIRST_RECORD_FORMAT = FIRST_RECORD_FORMAT
 module.exports.RECORD_FROMAT = RECORD_FROMAT
 module.exports._check = _check
 module.exports._calc = _calc
+
+module.exports.globalCmdOptions = globalCmdOptions
+module.exports.globalCompilerOptions = globalCompilerOptions

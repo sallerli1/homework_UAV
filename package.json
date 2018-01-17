@@ -1,0 +1,26 @@
+{
+  "name": "uav",
+  "version": "0.0.1",
+  "description": "thoughtworks homework",
+  "dependencies": {},
+  "main": "app.js",
+  "devDependencies": {
+      "jasmine": "2.8.0"
+  },
+  "scripts": {
+    "test": "node spec/run.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sallerli1/homework_UAV.git"
+  },
+  "keywords": [
+    "pantherandws234"
+  ],
+  "author": "saller",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sallerli1/homework_UAV/issues"
+  },
+  "homepage": "https://github.com/sallerli1/homework_UAV#readme"
+}

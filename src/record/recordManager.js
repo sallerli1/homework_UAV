@@ -1,35 +1,24 @@
 
 const EventEmitter = require("events")
-const { Result, createResult } = require("./result.js")
-const { FIRST_RECORD_FORMAT, RECORD_FROMAT, RESULT_ERROR, _calc, _check } = require("../shared/constants.js")
+const { createResult } = require("./result.js")
 const Compiler = require("../compiler/compiler.js")
-const {convertType} = require("../shared/util.js")
 
 class RecordManager extends EventEmitter {
-    static result;
-    _check;
-    _calc;
     constructor(options) {
-        let _check = options? options.check : _check
-            _calc = options? options.calc : _calc
-
-        this.compiler = new Compiler({
-            format: RECORD_FROMAT,
-            formatFirst: FIRST_RECORD_FORMAT,
-            resultError: RESULT_ERROR,
-            check: _check,
-            calc: _calc
-        })
-
+        super()
+        this.compiler = new Compiler(options)
         initRM(this)
     }
 
     calculate(record, options) {
+
+        // get a compiled function of the record
         let _calculate = this.compiler.compileToFunction(record)
         RecordManager.result = createResult(_calculate, options)
     }
 }
 
+// stores the latest result
 RecordManager.result = null
 
 function initRM (rm) {
