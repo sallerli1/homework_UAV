@@ -1,5 +1,4 @@
-plane1 1 1 1
-plane1 1 1 1 1 2 3
-plane1 2 3 4 1 1 1
-plane1 3 4 5
-plane1 1 1 1 1 2 3
+plane5 1 1 1
+plane5 1 1 1 1 2 3
+plane5 2 3 4 0 0 0
+plane5 3 4 5 1 1 1

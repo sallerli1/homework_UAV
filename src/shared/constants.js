@@ -1,4 +1,10 @@
 
+const { FIRST_RECORD_FORMAT,
+    RECORD_FROMAT,
+    _calc,
+    _check }
+    = require("../config.js")
+
 const resultStackLength = 10
 
 const RESULT_NOT_FOUND = 0
@@ -9,81 +15,6 @@ const RESULT_NOT_FOUND_MSG = "Cannot find "
 
 const RESULT_ERROR_MSG = "Error: "
 
-const FIRST_RECORD_FORMAT = [{
-    name: "ID",
-    type: String
-},
-{
-    name: "x",
-    type: "Integer"
-},
-{
-    name: "y",
-    type: "Integer"
-},
-{
-    name: "z",
-    type: "Integer"
-}]
-
-const RECORD_FROMAT = [{
-    name: "ID",
-    type: String
-},
-{
-    name: "x",
-    type: "Integer"
-},
-{
-    name: "y",
-    type: "Integer"
-},
-{
-    name: "z",
-    type: "Integer"
-},
-{
-    name: "ox",
-    type: "Integer"
-},
-{
-    name: "oy",
-    type: "Integer"
-},
-{
-    name: "oz",
-    type: "Integer"
-}]
-
-function _calc (record) {
-    record.x += record.ox
-    record.y += record.oy
-    record.z += record.oz
-}
-
-function _check (record, last) {
-    let typeCheck,
-        valueCheck
-
-    typeCheck = Number.isInteger(record.x)
-        && Number.isInteger(record.y)
-        && Number.isInteger(record.z)
-
-    if (last) {
-        valueCheck = last.x === record.x
-            && last.y === record.y
-            && last.z === record.z
-
-        typeCheck = typeCheck
-            && Number.isInteger(record.ox)
-            && Number.isInteger(record.oy)
-            && Number.isInteger(record.oz)
-    } else {
-        valueCheck = true
-    }
-    
-    return typeCheck && valueCheck
-}
 
 const globalCmdOptions = {
     file: {
@@ -116,6 +47,5 @@ module.exports.FIRST_RECORD_FORMAT = FIRST_RECORD_FORMAT
 module.exports.RECORD_FROMAT = RECORD_FROMAT
 module.exports._check = _check
 module.exports._calc = _calc
-
 module.exports.globalCmdOptions = globalCmdOptions
 module.exports.globalCompilerOptions = globalCompilerOptions

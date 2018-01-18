@@ -1,4 +1,12 @@
-const { convertType, seperaterRecord } = require("../shared/util.js")
+
+const { strIsType,
+    getType,
+    convertType,
+    seperaterRecord,
+    digitNumCheck,
+    patternCheck,
+    numRangeCheck } 
+    = require("../shared/util.js")
 const { globalCompilerOptions } = require("../shared/constants.js")
 
 class Compiler {
@@ -58,6 +66,7 @@ class Compiler {
 // compile the first msg of a record
 function compileFirst(msg, IDs, lasts, options) {
     let result = {},
+        value,
         ID = false
 
     for (const rule of options.formatFirst) {
@@ -70,10 +79,13 @@ function compileFirst(msg, IDs, lasts, options) {
         }
 
         // convert from string to a pre-defined type and check
-        if (!(result[rule["name"]] = convertType(msg.shift(), rule["type"]))) {
+        if ((value = getValue(msg, rule, options)) === options.resultError) {
             result = options.resultError
             break
         }
+
+        result[value["name"]] = value["value"] 
+
         if (result.ID && !ID) {
             ID = result.ID
         }
@@ -100,6 +112,7 @@ function compileFirst(msg, IDs, lasts, options) {
 // compile msgs of a record except the first
 function compileRest(msg, IDs, lasts, options) {
     let result = {},
+        value,
         ID = false
 
     for (const rule of options.format) {
@@ -108,10 +121,12 @@ function compileRest(msg, IDs, lasts, options) {
             break
         }
 
-        if (!(result[rule["name"]] = convertType(msg.shift(), rule["type"]))) {
+        if ((value = getValue(msg, rule, options)) === options.resultError) {
             result = options.resultError
             break
         }
+
+        result[value["name"]] = value["value"]       
 
         if (result.ID && !ID) {
             ID = result.ID
@@ -119,7 +134,9 @@ function compileRest(msg, IDs, lasts, options) {
     }
 
     // custom check
-    if (result === options.resultError || !options.check(result, lasts[ID])) {
+    if (result === options.resultError 
+        || !lasts[ID] 
+        || !options.check(result, lasts[ID])) {
         result = options.resultError
     } else {
         options.calc(result)
@@ -129,6 +146,50 @@ function compileRest(msg, IDs, lasts, options) {
         result,
         ID
     }
+}
+
+// convert from string to a pre-defined type and check
+function getValue(msg, rule, options) {
+    let strValue = msg.shift(),
+        typeStr = getType(rule["type"]),
+        result = {
+            name: rule["name"]
+        }
+
+        if (strIsType(strValue, typeStr)) {
+            result.value = convertType(strValue, rule["type"])
+        } else {
+            return options.resultError
+        }
+
+        // pattern check
+        if (typeStr === "String"
+            && isType(rule["pattern"], RegExp)
+            && !rule["pattern"].test(result.value)) {
+            return options.resultError
+        }
+
+        // Number check
+        if ((typeStr === "Integer"
+            || typeStr === "Decimal"
+            || typeStr === "Number")) {
+            if (rule["range"]
+                && !numRangeCheck(result.value,
+                    rule["range"][0],
+                    rule["range"][1])) {
+                return options.resultError
+            }
+            if (rule["digitNum"]
+                && !digitNumCheck(result.value,
+                    rule["digitNum"][0],
+                    rule["digitNum"][1],
+                    rule["digitNum"][2],
+                    rule["digitNum"][3])) {
+                return options.resultError
+            }
+        }
+
+    return result
 }
 
 module.exports = Compiler
