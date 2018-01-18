@@ -2,13 +2,15 @@
 
 ### Introduction
 
-This program is coded in javascript with node.js meant to collect flight records of a UAV() and then 
-get infomation from the records.
+This program is coded in javascript with node.js meant to collect flight records of a UAV(unmanned aerial vehicle) 
+and then get infomation from the records.
 
 The records could be collected by giving a file path in bash, then the records would be processed 
 into a set of results waiting to be queried later.
 
 The queries could be given through the bash, and query results would be based on the latest records.
+
+hint: this version now supports multiple UAV records in one file!!!
 
 ### Instructions
 
@@ -65,9 +67,9 @@ this program mainly contains classes as listed:
 
 #### Constants and configurations
 
-Constants being used are stored in shared/constants.js, it contains default options of API, such as commands
-and compiling rules.
+Constants being used are stored in shared/constants.js, it contains default options of API.
 
+configurations are stored in src/config.js, full discriptions are written as annotation in this file
 #### UI
 
 UI is meant to parse commands and execute them, it contain the core of the program as its member, 
